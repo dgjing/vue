@@ -1,19 +1,40 @@
 /* @flow */
 
 import config from '../config'
-import { initProxy } from './proxy'
-import { initState } from './state'
-import { initRender } from './render'
-import { initEvents } from './events'
-import { mark, measure } from '../util/perf'
-import { initLifecycle, callHook } from './lifecycle'
-import { initProvide, initInjections } from './inject'
-import { extend, mergeOptions, formatComponentName } from '../util/index'
+import {
+  initProxy
+} from './proxy'
+import {
+  initState
+} from './state'
+import {
+  initRender
+} from './render'
+import {
+  initEvents
+} from './events'
+import {
+  mark,
+  measure
+} from '../util/perf'
+import {
+  initLifecycle,
+  callHook
+} from './lifecycle'
+import {
+  initProvide,
+  initInjections
+} from './inject'
+import {
+  extend,
+  mergeOptions,
+  formatComponentName
+} from '../util/index'
 
 let uid = 0
 
-export function initMixin (Vue: Class<Component>) {
-  Vue.prototype._init = function (options?: Object) {
+export function initMixin(Vue: Class < Component > ) {
+  Vue.prototype._init = function (options ? : Object) {
     const vm: Component = this
     // a uid
     vm._uid = uid++
@@ -47,6 +68,7 @@ export function initMixin (Vue: Class<Component>) {
     } else {
       vm._renderProxy = vm
     }
+    // 合并配置，初始化生命周期，初始化事件中心，初始化渲染，初始化 data、props、computed、watcher
     // expose real self
     vm._self = vm
     initLifecycle(vm)
@@ -64,14 +86,14 @@ export function initMixin (Vue: Class<Component>) {
       mark(endTag)
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
-
+    // 检测到如果有 el 属性，则调用 vm.$mount 方法挂载 vm，挂载的目标就是把模板渲染成最终的 DOM，那么接下来我们来分析 Vue 的挂载过程。
     if (vm.$options.el) {
       vm.$mount(vm.$options.el)
     }
   }
 }
 
-export function initInternalComponent (vm: Component, options: InternalComponentOptions) {
+export function initInternalComponent(vm: Component, options: InternalComponentOptions) {
   const opts = vm.$options = Object.create(vm.constructor.options)
   // doing this because it's faster than dynamic enumeration.
   const parentVnode = options._parentVnode
@@ -90,7 +112,7 @@ export function initInternalComponent (vm: Component, options: InternalComponent
   }
 }
 
-export function resolveConstructorOptions (Ctor: Class<Component>) {
+export function resolveConstructorOptions(Ctor: Class < Component > ) {
   let options = Ctor.options
   if (Ctor.super) {
     const superOptions = resolveConstructorOptions(Ctor.super)
@@ -114,7 +136,7 @@ export function resolveConstructorOptions (Ctor: Class<Component>) {
   return options
 }
 
-function resolveModifiedOptions (Ctor: Class<Component>): ?Object {
+function resolveModifiedOptions(Ctor: Class < Component > ): ? Object {
   let modified
   const latest = Ctor.options
   const sealed = Ctor.sealedOptions

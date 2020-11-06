@@ -1,10 +1,19 @@
 /* @flow */
 
-import { ASSET_TYPES } from 'shared/constants'
-import { defineComputed, proxy } from '../instance/state'
-import { extend, mergeOptions, validateComponentName } from '../util/index'
+import {
+  ASSET_TYPES
+} from 'shared/constants'
+import {
+  defineComputed,
+  proxy
+} from '../instance/state'
+import {
+  extend,
+  mergeOptions,
+  validateComponentName
+} from '../util/index'
 
-export function initExtend (Vue: GlobalAPI) {
+export function initExtend(Vue: GlobalAPI) {
   /**
    * Each instance constructor, including Vue, has a unique
    * cid. This enables us to create wrapped "child
@@ -13,6 +22,11 @@ export function initExtend (Vue: GlobalAPI) {
   Vue.cid = 0
   let cid = 1
 
+  // Vue.extend 的作用就是构造一个 Vue 的子类，
+  // 它使用一种非常经典的原型继承的方式把一个纯对象转换一个继承于 Vue 的构造器 Sub 并返回，
+  // 然后对 Sub 这个对象本身扩展了一些属性，如扩展 options、添加全局 API 等；
+  // 并且对配置中的 props 和 computed 做了初始化工作；
+  // 最后对于这个 Sub 构造函数做了缓存，避免多次执行 Vue.extend 的时候对同一个子组件重复构造
   /**
    * Class inheritance
    */
@@ -30,7 +44,7 @@ export function initExtend (Vue: GlobalAPI) {
       validateComponentName(name)
     }
 
-    const Sub = function VueComponent (options) {
+    const Sub = function VueComponent(options) {
       this._init(options)
     }
     Sub.prototype = Object.create(Super.prototype)
@@ -80,14 +94,14 @@ export function initExtend (Vue: GlobalAPI) {
   }
 }
 
-function initProps (Comp) {
+function initProps(Comp) {
   const props = Comp.options.props
   for (const key in props) {
     proxy(Comp.prototype, `_props`, key)
   }
 }
 
-function initComputed (Comp) {
+function initComputed(Comp) {
   const computed = Comp.options.computed
   for (const key in computed) {
     defineComputed(Comp.prototype, key, computed[key])

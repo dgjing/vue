@@ -1,13 +1,26 @@
 /* @flow */
 
 import config from 'core/config'
-import { warn, cached } from 'core/util/index'
-import { mark, measure } from 'core/util/perf'
+import {
+  warn,
+  cached
+} from 'core/util/index'
+import {
+  mark,
+  measure
+} from 'core/util/perf'
 
 import Vue from './runtime/index'
-import { query } from './util/index'
-import { compileToFunctions } from './compiler/index'
-import { shouldDecodeNewlines, shouldDecodeNewlinesForHref } from './util/compat'
+import {
+  query
+} from './util/index'
+import {
+  compileToFunctions
+} from './compiler/index'
+import {
+  shouldDecodeNewlines,
+  shouldDecodeNewlinesForHref
+} from './util/compat'
 
 const idToTemplate = cached(id => {
   const el = query(id)
@@ -16,12 +29,13 @@ const idToTemplate = cached(id => {
 
 const mount = Vue.prototype.$mount
 Vue.prototype.$mount = function (
-  el?: string | Element,
-  hydrating?: boolean
+  el ? : string | Element,
+  hydrating ? : boolean
 ): Component {
   el = el && query(el)
 
   /* istanbul ignore if */
+  // 不能挂载到body和htmL上
   if (el === document.body || el === document.documentElement) {
     process.env.NODE_ENV !== 'production' && warn(
       `Do not mount Vue to <html> or <body> - mount to normal elements instead.`
@@ -30,6 +44,9 @@ Vue.prototype.$mount = function (
   }
 
   const options = this.$options
+  // 所有的vue的组件渲染都需要render方法，若是没有定义的render方法，则会把el template字符串转换成render方法
+  // Vue 2.0 版本中，所有 Vue 的组件的渲染最终都需要 render 方法 
+  // 这个过程是在线编译的过程compileToFunctions
   // resolve template/el and convert to render function
   if (!options.render) {
     let template = options.template
@@ -62,7 +79,10 @@ Vue.prototype.$mount = function (
         mark('compile')
       }
 
-      const { render, staticRenderFns } = compileToFunctions(template, {
+      const {
+        render,
+        staticRenderFns
+      } = compileToFunctions(template, {
         outputSourceRange: process.env.NODE_ENV !== 'production',
         shouldDecodeNewlines,
         shouldDecodeNewlinesForHref,
@@ -86,7 +106,7 @@ Vue.prototype.$mount = function (
  * Get outerHTML of elements, taking care
  * of SVG elements in IE as well.
  */
-function getOuterHTML (el: Element): string {
+function getOuterHTML(el: Element): string {
   if (el.outerHTML) {
     return el.outerHTML
   } else {

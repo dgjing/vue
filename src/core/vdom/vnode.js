@@ -1,9 +1,12 @@
 /* @flow */
 
+// VNode 是对真实 DOM 的一种抽象描述，它的核心定义无非就几个关键属性，
+// 标签名、数据、子节点、键值等，其它属性都是用来扩展 VNode 的灵活性以及实现一些特殊 feature 的。
+// 由于 VNode 只是用来映射到真实 DOM 的渲染，不需要包含操作 DOM 的方法，因此它是非常轻量和简单的。
 export default class VNode {
   tag: string | void;
   data: VNodeData | void;
-  children: ?Array<VNode>;
+  children: ? Array < VNode > ;
   text: string | void;
   elm: Node | void;
   ns: string | void;
@@ -25,19 +28,19 @@ export default class VNode {
   isAsyncPlaceholder: boolean;
   ssrContext: Object | void;
   fnContext: Component | void; // real context vm for functional nodes
-  fnOptions: ?ComponentOptions; // for SSR caching
-  devtoolsMeta: ?Object; // used to store functional render context for devtools
-  fnScopeId: ?string; // functional scope id support
+  fnOptions: ? ComponentOptions; // for SSR caching
+  devtoolsMeta: ? Object; // used to store functional render context for devtools
+  fnScopeId: ? string; // functional scope id support
 
-  constructor (
-    tag?: string,
-    data?: VNodeData,
-    children?: ?Array<VNode>,
-    text?: string,
-    elm?: Node,
-    context?: Component,
-    componentOptions?: VNodeComponentOptions,
-    asyncFactory?: Function
+  constructor(
+    tag ? : string,
+    data ? : VNodeData,
+    children ? : ? Array < VNode > ,
+    text ? : string,
+    elm ? : Node,
+    context ? : Component,
+    componentOptions ? : VNodeComponentOptions,
+    asyncFactory ? : Function
   ) {
     this.tag = tag
     this.data = data
@@ -66,7 +69,7 @@ export default class VNode {
 
   // DEPRECATED: alias for componentInstance for backwards compat.
   /* istanbul ignore next */
-  get child (): Component | void {
+  get child(): Component | void {
     return this.componentInstance
   }
 }
@@ -78,7 +81,7 @@ export const createEmptyVNode = (text: string = '') => {
   return node
 }
 
-export function createTextVNode (val: string | number) {
+export function createTextVNode(val: string | number) {
   return new VNode(undefined, undefined, undefined, String(val))
 }
 
@@ -86,7 +89,7 @@ export function createTextVNode (val: string | number) {
 // used for static nodes and slot nodes because they may be reused across
 // multiple renders, cloning them avoids errors when DOM manipulations rely
 // on their elm reference.
-export function cloneVNode (vnode: VNode): VNode {
+export function cloneVNode(vnode: VNode): VNode {
   const cloned = new VNode(
     vnode.tag,
     vnode.data,
